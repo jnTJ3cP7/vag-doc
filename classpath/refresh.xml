@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project default="build">
+
+  <target name="build">
+    <echo>start building ${targetProject} and ${basedir}</echo>
+    <eclipse.refreshLocal resource="${targetProject}" depth="infinite"/>
+    <eclipse.incrementalBuild project="${targetProject}" kind="clean"/>
+    <!--<eclipse.incrementalBuild project="${targetProject}"  kind="full"/>-->
+  </target>
+
+</project>

@@ -1,0 +1,8 @@
+version: '2'
+services:
+  base-alpine:
+    tty: true
+    build: ./base-alpine
+    image: base-alpine
+    container_name: base-alpine
+    command: /bin/sh

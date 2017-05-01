@@ -1,0 +1,18 @@
+version: '2'
+services:
+  oracle-datastore:
+    image: busybox
+    volumes:
+        - ./_data:/opt/oracle/oradata
+    container_name: oracle-datastore
+  oracle:
+    tty: true
+    image: oracle/database:12.2.0.1-ee
+    container_name: oracle
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    privileged: true
+    user: oracle
+    volumes_from:
+      - oracle-datastore

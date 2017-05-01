@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set long 100000
+set longchunksize 100000
+set pagesize 9999
+set linesize 9999
+set trimspool on
+
+
+SELECT DBMS_METADATA.GET_DDL('INDEX',INDEX_NAME, OWNER) FROM all_indexes WHERE OWNER = 'DOCKER';
+SELECT DBMS_METADATA.GET_DDL('TABLE', TABLE_NAME, OWNER) FROM all_tables WHERE OWNER = 'DOCKER';
+
+SELECT DISTINCT OBJECT_TYPE FROM USER_OBJECTS;
+
