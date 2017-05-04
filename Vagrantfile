@@ -18,13 +18,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "firstRunning", type: "shell", run: "never", path: "first_running.sh"
 
   config.vm.provision "oracle", type: "shell", run: "never", privileged: false, path: "oracle/initialOnVagrant.sh"
-
+  
   config.vm.provision "p2", type: "shell", run: "never", inline: "echo two"
   config.vm.provision "p3", type: "shell", run: "never", inline: "echo three"
-
-  # config.vm.provision "shell", run: "always", inline: <<-SHELL
-  #   echo 'In always provision area'
-  # SHELL
-  # config.vm.provision "shell", inline:  "docker-compose -f /vagrant/docker-compose.yml up -d", run: "always"
 
 end

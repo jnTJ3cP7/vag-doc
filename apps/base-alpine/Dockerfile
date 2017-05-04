@@ -1,6 +1,5 @@
 FROM alpine:3.5
 
-# gccインストール
 # https://github.com/frol/docker-alpine-glibc/blob/master/Dockerfile
 RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
     ALPINE_GLIBC_PACKAGE_VERSION="2.25-r0" && \
@@ -44,3 +43,6 @@ RUN apk --update add tzdata && \
 
 ENV LANG=ja_JP.UTF-8
 RUN echo Asia/Tokyo > /etc/timezone
+
+RUN apk --update add bash
+RUN ln -sfn /bin/bash /bin/sh

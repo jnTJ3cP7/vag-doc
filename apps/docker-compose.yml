@@ -6,3 +6,9 @@ services:
     image: base-alpine
     container_name: base-alpine
     command: /bin/sh
+  java8:
+    tty: true
+    build: ./java8
+    image: java8
+    container_name: java8
+    command: /bin/sh

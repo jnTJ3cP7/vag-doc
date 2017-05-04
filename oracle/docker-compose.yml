@@ -16,3 +16,15 @@ services:
     user: oracle
     volumes_from:
       - oracle-datastore
+    volumes:
+      - ./oracle_user_home:/home/oracle/shared
+  sqlplus:
+    tty: true
+    build: ./sqlplus
+    image: sqlplus
+    container_name: sqlplus
+    volumes:
+      - ./sqlplus/scripts:/scripts
+    # links:
+    #   - oracle:oracle.db.jp
+    command: /bin/sh
