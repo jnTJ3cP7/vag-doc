@@ -6,6 +6,7 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
     ALPINE_GLIBC_BASE_PACKAGE_FILENAME="glibc-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
     ALPINE_GLIBC_BIN_PACKAGE_FILENAME="glibc-bin-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
     ALPINE_GLIBC_I18N_PACKAGE_FILENAME="glibc-i18n-$ALPINE_GLIBC_PACKAGE_VERSION.apk" && \
+    apk update && \
     apk add --no-cache --virtual=.build-dependencies wget ca-certificates && \
     wget \
         "https://raw.githubusercontent.com/andyshinn/alpine-pkg-glibc/master/sgerrand.rsa.pub" \
@@ -35,7 +36,6 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
         "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
 
-RUN apk update && apk add wget
 RUN apk --update add tzdata && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     apk del tzdata && \
@@ -44,5 +44,8 @@ RUN apk --update add tzdata && \
 ENV LANG=ja_JP.UTF-8
 RUN echo Asia/Tokyo > /etc/timezone
 
-RUN apk --update add bash
-RUN ln -sfn /bin/bash /bin/sh
+RUN apk --update add bash && \
+    ln -sfn /bin/bash /bin/sh && \
+    ln -sfn /bin/bash /bin/ash
+
+RUN apk --update add diffutils
