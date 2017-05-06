@@ -1,10 +1,8 @@
 set lines 32767
 set pages 0
 set trimspool on
-set long 100000000
 set verify off
 set feedback off
-set longchunksize 100000000
 
 execute DBMS_METADATA.SET_TRANSFORM_PARAM( DBMS_METADATA.SESSION_TRANSFORM,'SQLTERMINATOR',TRUE );
 execute DBMS_METADATA.SET_TRANSFORM_PARAM( DBMS_METADATA.SESSION_TRANSFORM,'STORAGE',FALSE );

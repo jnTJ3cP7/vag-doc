@@ -38,6 +38,8 @@ do
   createSources "$line"
 sqlplus -s "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" <<EOF
 @preparation.sql
+set long 100000000
+set longchunksize 100000000
 @tmp_obj.sql
 spool &obj_spool_file
 SELECT DBMS_METADATA.GET_DDL('&obj',&obj_name) FROM &obj_users;

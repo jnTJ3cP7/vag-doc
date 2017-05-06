@@ -15,8 +15,13 @@ if [ $? -eq 0 ]; then
 else
   cd OracleDatabase/dockerfiles
   ORACLE_DB_VERSION='12.2.0.1'
+  DOCKERFILE='Dockerfile.ee'
+  DOCKERFILE_BACKUP='Dockerfile.ee.bak'
+  cp -f "$ORACLE_DB_VERSION/$DOCKERFILE" "$ORACLE_DB_VERSION/$DOCKERFILE_BACKUP"
+  sed -i -e "/^USER root$/a RUN ln -sfn /usr/share/zoneinfo/Asia/Tokyo /etc/localtime" "$ORACLE_DB_VERSION/$DOCKERFILE"
   # memory等を聞く
   ./buildDockerImage.sh -v "${ORACLE_DB_VERSION}" -e -i
+  mv -f "$ORACLE_DB_VERSION/$DOCKERFILE_BACKUP" "$ORACLE_DB_VERSION/$DOCKERFILE" 
   cd ../..
   runOracleDB
 fi

@@ -17,6 +17,8 @@ RUN apk --update add libaio
 
 ENV LD_LIBRARY_PATH=/sqlplus
 ENV PATH=/sqlplus:$PATH
+ENV NLS_LANG=Japanese_Japan.AL32UTF8
+ENV ORA_SDTZ=Japan
 
 RUN rm -rf /zips
 
