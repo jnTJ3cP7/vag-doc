@@ -38,13 +38,21 @@ if [ $? -eq 0  ]; then
   if [ `vagrant plugin list | grep 'vagrant-vbguest' | wc -l | awk '{print $1}'` -lt 1 ]; then
     vagrant plugin install vagrant-vbguest
   fi
-  sed -i -e "s/vbguest\.auto_update.*$/vbguest\.auto_update = true/g" ./Vagrantfile
-  sed -i -e "s/vbguest\.no_remote.*$/vbguest\.no_remote = false/g" ./Vagrantfile
+  SETTINGS_FILE='settings.yml'
+  VBGUEST_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -F : '$2 == "vbguest" { print $1 }'`
+  NEXT_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -v base=$VBGUEST_LINE -F : '$1 > base { print $1 }' | head -1`
+  if [NEXT_LINE]
+  VBGUEST_LINE=`expr $VBGUEST_LINE + 1`
+  NEXT_LINE=`expr $NEXT_LINE - 1`
+  if [ $? -gt 1 ]; then
+    NEXT_LINE=`grep '' $SETTINGS_FILE | wc -l`
+  fi
+  sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*auto_update:\).*$/\1 true/" $SETTINGS_FILE
+  sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*no_remote:\).*$/\1 false/" $SETTINGS_FILE
   vagrant up --provision-with firstRunning
   vagrantReload ${@+"$@"}
-  sed -i -e "s/vbguest\.auto_update.*$/vbguest\.auto_update = false/g" ./Vagrantfile
-  sed -i -e "s/vbguest\.no_remote.*$/vbguest\.no_remote = true/g" ./Vagrantfile
-  rm -f ./Vagrantfile-e
+  sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*auto_update:\).*$/\1 false/" $SETTINGS_FILE
+  sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*no_remote:\).*$/\1 true/" $SETTINGS_FILE
 else
   # ２回目以降はすでに起動しているかどうかを確認する
   vagrant status | grep -q 'running (virtualbox)'

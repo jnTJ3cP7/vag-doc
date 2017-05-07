@@ -1,0 +1,6 @@
+vbguest:
+  auto_update: false
+  no_remote: true
+vb:
+  memory: 3078
+  cpus: 2

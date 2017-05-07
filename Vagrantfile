@@ -1,7 +1,9 @@
 Vagrant.configure("2") do |config|
-  # 以下の２項目はアップデートしたいときは逆のbooleanにする
-  config.vbguest.auto_update = false
-  config.vbguest.no_remote = true
+  require 'yaml'
+  settings = YAML.load_file 'settings.yml'
+
+  config.vbguest.auto_update = settings['vbguest']['auto_update']
+  config.vbguest.no_remote = settings['vbguest']['no_remote']
 
   config.vm.box = "bento/centos-7.3"
   config.vm.box_check_update = false
@@ -11,8 +13,8 @@ Vagrant.configure("2") do |config|
   # config.hostsupdater.aliases = ["local.co.jp"]
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "3078"
-    vb.cpus = "2"
+    vb.memory = settings['vb']['memory']
+    vb.cpus = settings['vb']['cpus']
   end
 
   config.vm.provision "firstRunning", type: "shell", run: "never", path: "first_running.sh"

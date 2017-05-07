@@ -17,9 +17,7 @@ chmod +x /usr/local/bin/docker-compose
 curl -sSL https://get.docker.com/ | sh
 systemctl start docker.service
 systemctl enable docker.service
-# groupadd docker
 usermod -a -G docker vagrant
 systemctl stop docker.service
 rm -rf /var/lib/docker
-# sed -i -e "s/^\\(ExecStart=.*\\)$/\\1 --storage-opt dm\\.basesize=20G/g" /lib/systemd/system/docker.service
 exit
