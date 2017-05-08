@@ -24,6 +24,8 @@ vagrantUp() {
   fi
 }
 
+cd `dirname $0`
+
 VAGRANT_VERSION=`vagrant --version | sed -n -e 's/^Vagrant \(.*\)$/\1/p'`
 if [ `echo $VAGRANT_VERSION | wc -c | awk '{print $NF}'` -lt 2 ]; then
   echo 'please install Vagrant'
@@ -41,7 +43,6 @@ if [ $? -eq 0  ]; then
   SETTINGS_FILE='settings.yml'
   VBGUEST_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -F : '$2 == "vbguest" { print $1 }'`
   NEXT_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -v base=$VBGUEST_LINE -F : '$1 > base { print $1 }' | head -1`
-  if [NEXT_LINE]
   VBGUEST_LINE=`expr $VBGUEST_LINE + 1`
   NEXT_LINE=`expr $NEXT_LINE - 1`
   if [ $? -gt 1 ]; then

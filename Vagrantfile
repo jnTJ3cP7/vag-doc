@@ -10,6 +10,13 @@ Vagrant.configure("2") do |config|
 
   config.vm.network "private_network", ip: "192.168.33.10"
   config.vm.synced_folder "./", "/vagrant", mount_options: ['dmode=777', 'fmode=777']
+  if File.exist?(settings['mount']['workspace']) then
+    config.vm.synced_folder settings['mount']['workspace'], "/workspace", mount_options: ['dmode=777', 'fmode=777']
+  end
+  if File.exist?(settings['mount']['m2']) then
+    config.vm.synced_folder settings['mount']['m2'], "/m2", mount_options: ['dmode=777', 'fmode=777']
+  end
+  
   # config.hostsupdater.aliases = ["local.co.jp"]
 
   config.vm.provider "virtualbox" do |vb|

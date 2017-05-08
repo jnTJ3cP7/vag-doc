@@ -1,0 +1,16 @@
+version: '2'
+services:
+  t6j6:
+    tty: true
+    build:
+      context: ./t6j6
+      args:
+        CONTEXT_PATH: 't6j6'
+    image: t6j6
+    container_name: t6j6
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+    volumes:
+      - /workspace/Tomcat6Java6Ant01/src/main/webapp:/usr/local/tomcat/webapps/t6j6:ro
+    command: /executeContainer.sh

@@ -6,6 +6,18 @@ services:
     image: base-alpine
     container_name: base-alpine
     command: /bin/sh
+  tomcat6:
+    tty: true
+    build: ./tomcat6
+    image: tomcat6
+    container_name: tomcat6
+    command: /bin/sh
+  tomcat6-java6:
+    tty: true
+    build: ./tomcat6-java6
+    image: tomcat6-java6
+    container_name: tomcat6-java6
+    command: /bin/sh
   java8:
     tty: true
     build: ./java8

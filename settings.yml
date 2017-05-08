@@ -1,3 +1,6 @@
+mount:
+  workspace: '../../Documents/workspace'
+  m2: '../../.m2'
 vbguest:
   auto_update: false
   no_remote: true
