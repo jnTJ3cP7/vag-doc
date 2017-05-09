@@ -35,15 +35,17 @@ fi
 
 cat objects.txt | while read -r line
 do
-  createSources "$line"
-sqlplus -s "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" <<EOF
-@preparation.sql
-set long 100000000
-set longchunksize 100000000
-@tmp_obj.sql
-spool &obj_spool_file
-SELECT DBMS_METADATA.GET_DDL('&obj',&obj_name) FROM &obj_users;
+  if [ $line != 'LOB' ]; then
+    createSources "$line"
+    sqlplus -s "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" <<EOF
+      @preparation.sql
+      set long 100000000
+      set longchunksize 100000000
+      @tmp_obj.sql
+      spool &obj_spool_file
+      SELECT DBMS_METADATA.GET_DDL('&obj',&obj_name) FROM &obj_users;
 EOF
+  fi
 done
 
 DATE=`date +%Y%m%d%H%M%S`
