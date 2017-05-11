@@ -1,0 +1,5 @@
+USER=docker2
+PASSWORD=test
+HOST=oracle.db.jp
+PORT=1521
+SERVICE_NAME=ORCLPDB1

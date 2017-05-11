@@ -64,4 +64,46 @@ do
   cat "$spool" >> $OUTPUT
 done
 
-rm -rf *.spool objects.txt tmp_obj.sql
+egrep -n 'CONSTRAINT.*PRIMARY KEY \(".*\)' $OUTPUT > pk.txt
+egrep -n 'CREATE TABLE' $OUTPUT > ct.txt
+egrep -vn '^.+' $OUTPUT | awk -F : '{ print $1 }' > no.txt
+
+cat pk.txt | while read -r line
+do
+  TARGET_LINE=`echo "$line" | awk -F : '{ print $1 }'`
+  TARGET_TABLE=`awk -v base="$TARGET_LINE" -F : '$1 < base { print $2 }' ct.txt | tail -1 | sed -e 's/^.*\.\(".*"\)$/\1/'`
+  TARGET_KEY=`echo "$line" | awk -F : '{ print $2 }' | sed -e 's/^.*(\("[^)]*"\))$/\1/'`
+  DELETE_BASE_LINE=`grep -n "CREATE UNIQUE INDEX.*\.$TARGET_TABLE ($TARGET_KEY)" $OUTPUT | awk -F : '{ print $1 }'`
+  DELETE_TMP_LINE=`awk -v base="$DELETE_BASE_LINE" '$1 > base' no.txt | head -1`
+  DELETE_UNTIL_LINE=`expr $DELETE_TMP_LINE - 1`
+  if [ $? -gt 1 ]; then
+    echo "${DELETE_BASE_LINE}d;" >> delete.txt
+  else
+    echo "${DELETE_BASE_LINE},${DELETE_UNTIL_LINE}d;" >> delete.txt
+  fi
+done
+
+grep -n "CREATE UNIQUE INDEX.*\.\"SYS_.*\$\$\"" $OUTPUT | awk -F : '{ print $1 }' > lob.txt
+cat lob.txt | while read -r line
+do
+  DELETE_TMP_LINE=`awk -v base="$line" '$1 > base' no.txt | head -1`
+  DELETE_UNTIL_LINE=`expr $DELETE_TMP_LINE - 1`
+  if [ $? -gt 1 ]; then
+    echo "${line}d;" >> delete.txt
+  else
+    echo "${line},${DELETE_UNTIL_LINE}d;" >> delete.txt
+  fi
+done
+
+DELETE_LINE=''
+cat delete.txt | while read -r line
+do
+  DELETE_LINE="${DELETE_LINE}${line}"
+  echo "$DELETE_LINE" > delCmd.txt
+done
+DEL_CMD=`cat delCmd.txt`
+
+sed -i -e "${DEL_CMD%;}" $OUTPUT
+
+
+rm -rf *.spool objects.txt tmp_obj.sql pk.txt ct.txt no.txt delete.txt delCmd.txt lob.txt
