@@ -13,6 +13,12 @@ else
   read -p 'SERVICE_NAME : ' SERVICE_NAME
 fi
 
+sqlplus -s "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" <<EOF
+  @preparation.sql
+  spool ignore.txt
+  select INDEX_NAME from user_constraints where INDEX_NAME is not null;
+EOF
+
 DATE=`date +%Y%m%d%H%M%S`
 
 OUTPUT="drop_${USER}_objects_${DATE}.sql"
@@ -30,5 +36,13 @@ awk '$2 == "TABLE"' $OUTPUT > tables.txt
 sed -i -e "/^drop TABLE.*CASCADE CONSTRAINTS PURGE;$/d" $OUTPUT
 cat tables.txt >> $OUTPUT
 
+cat ignore.txt | while read -r line
+do
+  sed -i -e "/^drop INDEX $line;$/d" $OUTPUT
+done
 
-rm -rf output.sql tables.txt
+sed -i -e "/^drop INDEX.*\$\$;$/d" $OUTPUT
+sed -i -e "/^drop LOB.*\$\$;$/d" $OUTPUT
+
+
+rm -rf output.sql tables.txt ignore.txt
