@@ -12,6 +12,7 @@ services:
       - "8080:8080"
       - "8000:8000"
       - "9090:9090"
+      - "9091:9091"
     volumes:
-      - /workspace/Tomcat6Java6Ant01/src/main/webapp:/usr/local/tomcat/webapps/t6j6:ro
+      - /workspace/Tomcat6Java6Ant01/src/main/webapp:/usr/local/tomcat/webapps/t6j6
     command: /executeContainer.sh

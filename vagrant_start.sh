@@ -1,5 +1,32 @@
 #!/bin/sh
 
+set_vagrant_env() {
+  while :
+  do
+    read -p 'VAGRANT MEMORY(default : 1536) : ' VAGRANT_MEMORY
+    echo $VAGRANT_MEMORY | egrep -q '^[a-z][A-Z][0-9]+$'
+    if [ $? -ne 0 ]; then
+      VAGRANT_MEMORY=1536
+      echo "use default : $VAGRANT_MEMORY"
+      break
+    else
+      echo $VAGRANT_MEMORY | egrep -q '^[1-9][0-9]+$'
+      if [ $? -eq 0 ]; then
+        break
+      fi
+      echo '!!!!!!!!!! ERROR !!!!!!!!'
+    fi
+  done
+  VB_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -F : '$2 == "vb" { print $1 }'`
+  NEXT_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -v base=$VB_LINE -F : '$1 > base { print $1 }' | head -1`
+  VB_LINE=`expr $VB_LINE + 1`
+  NEXT_LINE=`expr $NEXT_LINE - 1`
+  if [ $? -gt 1 ]; then
+    NEXT_LINE=`grep '' $SETTINGS_FILE | wc -l`
+  fi
+  sed -i -e "$VB_LINE,$NEXT_LINE s/memory: .*$/memory: $VAGRANT_MEMORY/" settings.yml
+}
+
 vagrantReload() {
   if [ $# -gt 0 ]; then
     for PROVISION in "$@"
@@ -50,6 +77,9 @@ if [ $? -eq 0  ]; then
   fi
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*auto_update:\).*$/\1 true/" $SETTINGS_FILE
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*no_remote:\).*$/\1 false/" $SETTINGS_FILE
+
+  set_vagrant_env
+
   vagrant up --provision-with firstRunning
   vagrantReload ${@+"$@"}
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*auto_update:\).*$/\1 false/" $SETTINGS_FILE

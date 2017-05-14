@@ -36,7 +36,7 @@ RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases
         "$ALPINE_GLIBC_BIN_PACKAGE_FILENAME" \
         "$ALPINE_GLIBC_I18N_PACKAGE_FILENAME"
 
-RUN apk --update add wget tzdata && \
+RUN apk --update add wget diffutils tzdata && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     apk del tzdata && \
     rm -rf /var/cache/apk/*
@@ -48,4 +48,5 @@ RUN apk --update add bash && \
     ln -sfn /bin/bash /bin/sh && \
     ln -sfn /bin/bash /bin/ash
 
-RUN apk --update add diffutils
+RUN apk --update add vim && \
+    ln -sfn /usr/bin/vim /usr/bin/vi

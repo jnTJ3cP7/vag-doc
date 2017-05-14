@@ -1,0 +1,5 @@
+USER=docker
+PASSWORD=test
+HOST=localhost
+PORT=1521
+SERVICE_NAME=ORCLPDB1
