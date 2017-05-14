@@ -12,7 +12,7 @@ else
   read -p 'PORT : ' PORT
   read -p 'SERVICE_NAME : ' SERVICE_NAME
 fi
-session_privs;
+
 echo '############ ALL PRIVILEGES ###########'
 
 sqlplus -s "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" <<EOF

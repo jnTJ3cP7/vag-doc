@@ -1,0 +1,5 @@
+DIRECTORY=expdp
+DUMPFILE=dump.dmp
+LOGFILE=exp.log
+SCHEMAS=DOCKER3
+JOB_NAME=job_exp1
