@@ -60,6 +60,12 @@ if [ `echo $VAGRANT_VERSION | wc -c | awk '{print $NF}'` -lt 2 ]; then
 fi
 echo "Vagrant version is $VAGRANT_VERSION"
 
+RSYNC_VERSION=`rsync --version | sed -n -e 's/^rsync[^v]*\(.*\)$/\1/p'`
+if [ `echo $RSYNC_VERSION | wc -c | awk '{print $NF}'` -lt 2 ]; then
+  echo 'recommend that you install rsync'
+fi
+echo "rsync $RSYNC_VERSION"
+
 # vagrant status で１回目かどうか判断する
 vagrant status | grep -q 'not created (virtualbox)'
 if [ $? -eq 0  ]; then
@@ -84,12 +90,16 @@ if [ $? -eq 0  ]; then
   vagrantReload ${@+"$@"}
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*auto_update:\).*$/\1 false/" $SETTINGS_FILE
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*no_remote:\).*$/\1 true/" $SETTINGS_FILE
+
+  nohup vagrant rsync-auto > /dev/null 2>&1 &
 else
   # ２回目以降はすでに起動しているかどうかを確認する
   vagrant status | grep -q 'running (virtualbox)'
   if [ $? -eq 0 ]; then
     vagrantReload ${@+"$@"}
+    nohup vagrant rsync-auto > /dev/null 2>&1 &
   else
     vagrantUp ${@+"$@"}
+    nohup vagrant rsync-auto > /dev/null 2>&1 &
   fi
 fi

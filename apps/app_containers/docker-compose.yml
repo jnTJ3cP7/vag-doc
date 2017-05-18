@@ -5,7 +5,7 @@ services:
     build:
       context: ./t6j6
       args:
-        CONTEXT_PATH: 't6j6'
+        CONTEXT_PATH: t6j6
     image: t6j6
     container_name: t6j6
     ports:
@@ -15,4 +15,6 @@ services:
       - "9091:9091"
     volumes:
       - /workspace/Tomcat6Java6Ant01/src/main/webapp:/usr/local/tomcat/webapps/t6j6
-    command: /executeContainer.sh
+      - ./t6j6:/run-scripts
+      - /home/vagrant/fff:/fff
+    command: /bin/sh

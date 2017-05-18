@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: "192.168.33.10"
   config.vm.synced_folder "./", "/vagrant", mount_options: ['dmode=777', 'fmode=777']
   if File.exist?(settings['mount']['workspace']) then
-    config.vm.synced_folder settings['mount']['workspace'], "/workspace", mount_options: ['dmode=777', 'fmode=777']
+    config.vm.synced_folder settings['mount']['workspace'], "/workspace", type: "rsync", rsync__args: ["--verbose", "--archive", "--delete", "--copy-links", "--times", "-z", "--chmod=Du=rwx,Dgo=rwx,Fu=rwx,Fgo=rwx"]
   end
   if File.exist?(settings['mount']['m2']) then
     config.vm.synced_folder settings['mount']['m2'], "/m2", mount_options: ['dmode=777', 'fmode=777']
