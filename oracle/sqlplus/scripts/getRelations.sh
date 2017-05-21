@@ -6,6 +6,7 @@ createSources() {
   key_1_flag=false
   select_columns=''
   COLUMNS=(`awk -v arg=$1 -F , '$1 == arg { print $2 }' objects.txt`)
+  echo "CULUMUNS:${COLUMNS[@]}"
   for col in "${COLUMNS[@]}"
   do
     if [ $col = ${relation_key_1} ]; then
@@ -13,13 +14,13 @@ createSources() {
     fi
     select_columns="${select_columns}${col}${select_csv}"
   done
-  select_columns=`echo "$select_columns" | sed -e "s/^\(.*\)${select_csv}$/\1/"`
-  echo "define select_columns=\"$select_columns\"" >> tmp_obj.sql
+  echo "$select_columns" | sed -e "s/^\(.*\)${select_csv}$/SELECT \1 /" > exec.sql
+  echo "FROM $1 " >> exec.sql
   if $key_1_flag; then
-    echo "define where_key=\"${relation_key_1} = '${relation_value_1}'\"" >> tmp_obj.sql
+    echo "WHERE ${relation_key_1} = '${relation_value_1}';" >> exec.sql
   else
     relation_value_2=`echo "${VALUE2[@]}" | sed -e "s/ /','/g"`
-    echo "define where_key=\"${relation_key_2} in ('${relation_value_2}')\"" >> tmp_obj.sql
+    echo "WHERE ${relation_key_2} in ('${relation_value_2}');" >> exec.sql
   fi
 }
 
@@ -98,12 +99,12 @@ do
     set longchunksize 100000000
     @tmp_obj.sql
     spool &spool_file
-    SELECT &select_columns FROM &tbl where &where_key;
+    @exec.sql
 EOF
   insert_columns=`echo "($select_columns)" | sed -e "s/$select_csv/,/g"`
   cat "${table}.spool" | while read -r data
   do
-    echo "insert into $table $insert_columns values ('`echo $data | sed -e "s/,/','/"`');" >> $OUTPUT
+    echo "insert into $table $insert_columns values ('`echo $data | sed -e "s/,/','/g"`');" >> $OUTPUT
   done
 done
 

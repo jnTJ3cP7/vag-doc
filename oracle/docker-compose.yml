@@ -25,6 +25,26 @@ services:
     container_name: sqlplus
     volumes:
       - ./sqlplus/scripts:/scripts
-    # links:
-    #   - oracle:oracle.db.jp
+    links:
+      - oracle:oracle.db.jp
     command: /bin/sh
+  sub-oracle-datastore:
+    image: busybox
+    volumes:
+        - ./_sub_data:/opt/oracle/oradata
+    container_name: sub-oracle-datastore
+  sub-oracle:
+    tty: true
+    image: oracle/database:12.2.0.1-ee
+    container_name: sub-oracle
+    ports:
+      - "1921:1521"
+      - "5900:5500"
+    privileged: true
+    user: oracle
+    volumes_from:
+      - sub-oracle-datastore
+    volumes:
+      - ./sqlplus/scripts:/home/oracle/sqlplus
+    links:
+      - oracle:oracle.db.jp
