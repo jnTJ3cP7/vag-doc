@@ -31,9 +31,11 @@ expdp "$USER/$PASSWORD@$SERVICE_NAME" network_link="$DB_LINK" directory=DUMP con
 
 
 impdp "$USER/$PASSWORD@$SERVICE_NAME" \
+REMAP_SCHEMA=DOCKER3:$USER \
 REMAP_TABLESPACE=USER:USER \
 directory=DUMP \
-table_exists_action = replace
+table_exists_action = replace \
+exclude=user
 
 # impdp docker3/test@ORCLPDB1 \
 # REMAP_SCHEMA=DOCKER3:DOCKER3 \
