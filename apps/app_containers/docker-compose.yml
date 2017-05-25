@@ -18,3 +18,11 @@ services:
       - ./t6j6:/run-scripts
       - /home/vagrant/fff:/fff
     command: /bin/sh
+  smtp:
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+networks:
+  mynetwork:
+    driver: bridge

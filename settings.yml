@@ -7,3 +7,8 @@ vbguest:
 vb:
   memory: 3078
   cpus: 2
+rsync:
+  excludes:
+    - .git/
+    - '**/hogeDir/'
+  tow_ways:

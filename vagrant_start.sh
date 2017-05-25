@@ -73,6 +73,9 @@ if [ $? -eq 0  ]; then
   if [ `vagrant plugin list | grep 'vagrant-vbguest' | wc -l | awk '{print $1}'` -lt 1 ]; then
     vagrant plugin install vagrant-vbguest
   fi
+  if [ `vagrant plugin list | grep 'vagrant-gatling-rsync' | wc -l | awk '{print $1}'` -lt 1 ]; then
+    vagrant plugin install vagrant-gatling-rsync
+  fi
   SETTINGS_FILE='settings.yml'
   VBGUEST_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -F : '$2 == "vbguest" { print $1 }'`
   NEXT_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -v base=$VBGUEST_LINE -F : '$1 > base { print $1 }' | head -1`
@@ -91,15 +94,15 @@ if [ $? -eq 0  ]; then
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*auto_update:\).*$/\1 false/" $SETTINGS_FILE
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*no_remote:\).*$/\1 true/" $SETTINGS_FILE
 
-  nohup vagrant rsync-auto > /dev/null 2>&1 &
+  nohup vagrant gatling-rsync-auto > /dev/null 2>&1 &
 else
   # ２回目以降はすでに起動しているかどうかを確認する
   vagrant status | grep -q 'running (virtualbox)'
   if [ $? -eq 0 ]; then
     vagrantReload ${@+"$@"}
-    nohup vagrant rsync-auto > /dev/null 2>&1 &
+    nohup vagrant gatling-rsync-auto > /dev/null 2>&1 &
   else
     vagrantUp ${@+"$@"}
-    nohup vagrant rsync-auto > /dev/null 2>&1 &
+    nohup vagrant gatling-rsync-auto > /dev/null 2>&1 &
   fi
 fi
