@@ -10,5 +10,5 @@ vb:
 rsync:
   excludes:
     - .git/
-    - '**/hogeDir/'
+    - 'classes/config/application.yml'
   tow_ways:

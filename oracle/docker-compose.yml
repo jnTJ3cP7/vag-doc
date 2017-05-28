@@ -48,3 +48,7 @@ services:
       - ./sqlplus/scripts:/home/oracle/sqlplus
     links:
       - oracle:oracle.db.jp
+networks:
+  default:
+    external:
+      name: common_link

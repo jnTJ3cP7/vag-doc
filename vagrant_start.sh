@@ -27,18 +27,6 @@ set_vagrant_env() {
   sed -i -e "$VB_LINE,$NEXT_LINE s/memory: .*$/memory: $VAGRANT_MEMORY/" settings.yml
 }
 
-vagrantReload() {
-  if [ $# -gt 0 ]; then
-    for PROVISION in "$@"
-      do
-        PROVISIONS=${PROVISIONS}${PROVISION},
-      done
-      vagrant reload --provision-with `echo $PROVISIONS | sed -e "s/,$//"`
-  else
-    vagrant reload
-  fi
-}
-
 vagrantUp() {
   if [ $# -gt 0 ]; then
     for PROVISION in "$@"
@@ -90,19 +78,20 @@ if [ $? -eq 0  ]; then
   set_vagrant_env
 
   vagrant up --provision-with firstRunning
-  vagrantReload ${@+"$@"}
+  vagrant halt
+  rm -rf .vagrant/machines/default/virtualbox/synced_folders
+  vagrantUp ${@+"$@"}
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*auto_update:\).*$/\1 false/" $SETTINGS_FILE
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*no_remote:\).*$/\1 true/" $SETTINGS_FILE
 
-  nohup vagrant gatling-rsync-auto > /dev/null 2>&1 &
+  vagrant gatling-rsync-auto > /dev/null 2>&1 &
 else
   # ２回目以降はすでに起動しているかどうかを確認する
   vagrant status | grep -q 'running (virtualbox)'
   if [ $? -eq 0 ]; then
-    vagrantReload ${@+"$@"}
-    nohup vagrant gatling-rsync-auto > /dev/null 2>&1 &
-  else
-    vagrantUp ${@+"$@"}
-    nohup vagrant gatling-rsync-auto > /dev/null 2>&1 &
+    vagrant halt
   fi
+  rm -rf .vagrant/machines/default/virtualbox/synced_folders
+  vagrantUp ${@+"$@"}
+  vagrant gatling-rsync-auto > /dev/null 2>&1 &
 fi

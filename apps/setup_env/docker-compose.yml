@@ -24,3 +24,12 @@ services:
     image: java8
     container_name: java8
     command: /bin/sh
+  spring-boot:
+    tty: true
+    build:
+      context: ./spring-boot
+      args:
+        MAVEN_VERSION: 3.5.0
+    image: spring-boot
+    container_name: spring-boot
+    command: /bin/sh

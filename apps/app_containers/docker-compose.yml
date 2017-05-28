@@ -17,12 +17,26 @@ services:
       - /workspace/Tomcat6Java6Ant01/src/main/webapp:/usr/local/tomcat/webapps/t6j6
       - ./t6j6:/run-scripts
       - /home/vagrant/fff:/fff
-    command: /bin/sh
+    command: /run-scripts/executeContainer.sh
+  boot10:
+    tty: true
+    image: spring-boot:latest
+    container_name: boot10
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+    volumes:
+      - /workspace/spring-boot-10:/app
+      - ./boot10:/run-scripts
+      - /m2:/root/.m2
+    command: /run-scripts/executeContainer.sh
   smtp:
     image: schickling/mailcatcher
+    container_name: smtp
     ports:
       - "1080:1080"
       - "1025:1025"
 networks:
-  mynetwork:
-    driver: bridge
+  default:
+    external:
+      name: common_link
