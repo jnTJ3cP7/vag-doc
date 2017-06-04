@@ -33,3 +33,33 @@ services:
     image: spring-boot
     container_name: spring-boot
     command: /bin/sh
+  build-server:
+    tty: true
+    build:
+      context: ./build-server
+      args:
+        MAVEN_VERSION: 3.5.0
+    image: build-server
+    container_name: build-server
+    volumes:
+      - /m2:/root/.m2
+      - /workspace:/workspace
+      - ./build-server/build-scripts:/build-scripts
+    command: /bin/sh
+  smtp:
+    image: schickling/mailcatcher
+    container_name: smtp
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+  nginx-proxy:
+    image: jwilder/nginx-proxy:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+networks:
+  default:
+    external:
+      name: common_link

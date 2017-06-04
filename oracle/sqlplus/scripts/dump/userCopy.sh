@@ -51,11 +51,9 @@ EOF
 expdp "$USER/$PASSWORD@$SERVICE_NAME" network_link="$NEW_LINK_NAME" directory=DUMP content=metadata_only;
 
 impdp "$USER/$PASSWORD@$SERVICE_NAME" \
-REMAP_SCHEMA=${FROM_USER}:${USER} \
 REMAP_TABLESPACE=USER:USER \
 directory=DUMP \
-table_exists_action = replace \
-exclude=user
+table_exists_action=replace
 
 sqlplus -s "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" <<EOF
 @preparation.sql

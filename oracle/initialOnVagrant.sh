@@ -13,9 +13,14 @@ runOracleDB() {
   exec 2> /dev/null
   sh -c 'tail -n +0 -f ~/dockerRun.log | { while read -r line; do echo $line; \
     echo $line | grep -q "DATABASE IS READY TO USE" && break; done && kill $$; }' || :
+  rm -f dockerRun.log
 }
 
-cd /vagrant/oracle
+if [ $# -eq 1 ] && [ -d "$1" ]; then
+  cd $1
+else
+  cd `dirname $0`
+fi
 
 docker images | grep -q 'oracle/database'
 if [ $? -eq 0 ]; then

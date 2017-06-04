@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="Shift_JIS" ?>
+<project name="Tomcat6Java6Ant01" default="tes" basedir=".">
+  <property file="build.properties"/>
+  <path id="requiredLibraries">
+    <fileset dir="${lib.dir}" includes="*.jar"/>
+  </path>
+  <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+
+  <target name="copyResources">
+    <for param="targetModule" list="${dep.lis}">
+      <sequential>
+        <var name="exist" unset="true"/>
+        <available file="${root.dir}/@{targetModule}/src/main/resources" property="exist"/>
+        <if>
+          <isset property="exist"/>
+          <then>
+            <copy todir="${classes.dir}" overwrite="true" verbose="true">
+              <fileset dir="${root.dir}/@{targetModule}/src/main/resources"/>
+            </copy>
+          </then>
+        </if>
+        <if>
+          <equals arg1="@{targetModule}" arg2="Tomcat6Java6Ant01"/>
+          <then>
+            <javac srcdir="${root.dir}/@{targetModule}/src/main/java" destdir="${classes.dir}" encoding="UTF-8" classpathref="requiredLibraries"/>
+          </then>
+          <else>
+            <var name="exist" unset="true"/>
+            <available file="${root.dir}/@{targetModule}/target/classes" property="exist"/>
+            <echo>${exist}</echo>
+            <if>
+              <isset property="exist"/>
+              <then>
+                <copy todir="${classes.dir}" overwrite="true" verbose="true">
+                  <fileset dir="${root.dir}/@{targetModule}/target/classes"/>
+                </copy>
+              </then>
+            </if>
+          </else>
+        </if>
+      </sequential>
+    </for>
+  </target>
+
+  <target name="copyLibraries">
+    <for param="targetModule" list="${dep.lis}">
+      <sequential>
+        <var name="exist" unset="true"/>
+        <available file="${root.dir}/@{targetModule}/src/main/lib" property="exist"/>
+        <if>
+          <isset property="exist"/>
+          <then>
+            <copy todir="${lib.dir}" overwrite="true" verbose="true">
+              <fileset dir="${root.dir}/@{targetModule}/src/main/lib" includes="*.jar"/>
+            </copy>
+          </then>
+        </if>
+      </sequential>
+    </for>
+  </target>
+
+  <target name="compile">
+    <for param="targetModule" list="${dep.lis}">
+      <sequential>
+        <var name="exist" unset="true"/>
+        <available file="${root.dir}/@{targetModule}/src/main/java" property="exist"/>
+        <if>
+          <isset property="exist"/>
+          <then>
+            <if>
+              <not>
+                <equals arg1="@{targetModule}" arg2="Tomcat6Java6Ant01"/>
+              </not>
+              <then>
+                <javac srcdir="${root.dir}/@{targetModule}/src/main/java" destdir="${root.dir}/@{targetModule}/target/classes" encoding="UTF-8" classpathref="requiredLibraries"/>
+              </then>
+            </if>
+          </then>
+        </if>
+      </sequential>
+    </for>
+  </target>
+
+  <target name="tes">
+    <antcall target="copyLibraries"/>
+    <antcall target="compile"/>
+    <antcall target="copyResources"/>
+  </target>
+</project>

@@ -1,5 +1,5 @@
-USER=docker3
+USER=system
 PASSWORD=test
-HOST=sub-oracle
+HOST=localhost
 PORT=1521
 SERVICE_NAME=ORCLPDB1

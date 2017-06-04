@@ -13,11 +13,10 @@ Vagrant.configure("2") do |config|
   if File.exist?(settings['mount']['workspace']) then
     config.vm.synced_folder settings['mount']['workspace'], "/workspace", type: "rsync", rsync__args: ["--verbose", "--archive", "--delete", "--copy-links", "--times", "-z", "--chmod=Du=rwx,Dgo=rwx,Fu=rwx,Fgo=rwx"], rsync__exclude: settings['rsync']['excludes']
     if Vagrant.has_plugin?("vagrant-gatling-rsync")
-      config.gatling.latency = 3.0
+      config.gatling.latency = settings['rsync']['latency']
       config.gatling.time_format = "%H:%M:%S"
       config.gatling.rsync_on_startup = false
     end
-    p settings['rsync']['tow_ways']
   end
   if File.exist?(settings['mount']['m2']) then
     config.vm.synced_folder settings['mount']['m2'], "/m2", mount_options: ['dmode=777', 'fmode=777']
@@ -32,7 +31,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "firstRunning", type: "shell", run: "never", path: "first_running.sh"
 
-  config.vm.provision "oracle", type: "shell", run: "never", privileged: false, path: "oracle/initialOnVagrant.sh"
+  config.vm.provision "oracle", type: "shell", run: "never", privileged: false, path: "oracle/initialOnVagrant.sh", args: ["/vagrant/oracle"]
   
   config.vm.provision "p2", type: "shell", run: "never", inline: "echo two"
   config.vm.provision "p3", type: "shell", run: "never", inline: "echo three"

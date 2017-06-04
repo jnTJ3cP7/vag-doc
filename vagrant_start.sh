@@ -64,6 +64,9 @@ if [ $? -eq 0  ]; then
   if [ `vagrant plugin list | grep 'vagrant-gatling-rsync' | wc -l | awk '{print $1}'` -lt 1 ]; then
     vagrant plugin install vagrant-gatling-rsync
   fi
+  if [ `vagrant plugin list | grep 'vagrant-rsync-back' | wc -l | awk '{print $1}'` -lt 1 ]; then
+    vagrant plugin install vagrant-rsync-back
+  fi
   SETTINGS_FILE='settings.yml'
   VBGUEST_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -F : '$2 == "vbguest" { print $1 }'`
   NEXT_LINE=`egrep -vn '^ +' $SETTINGS_FILE | awk -v base=$VBGUEST_LINE -F : '$1 > base { print $1 }' | head -1`
