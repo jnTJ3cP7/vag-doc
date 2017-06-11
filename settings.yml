@@ -1,6 +1,10 @@
 mount:
+  rsync: ./rsync
   workspace: '../../Documents/workspace'
   m2: '../../.m2'
+  vagrant:
+    - ./apps
+    - ./oracle
 vbguest:
   auto_update: false
   no_remote: true
@@ -11,4 +15,7 @@ rsync:
   excludes:
     - .git/
     - 'classes/config/application.yml'
-  latency: 2.5
+  latency: 1.5
+hostsupdater:
+  aliases:
+    - 'local.co.jp'

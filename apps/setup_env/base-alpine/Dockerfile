@@ -1,4 +1,4 @@
-FROM alpine:3.5
+FROM alpine:3.6
 
 # https://github.com/frol/docker-alpine-glibc/blob/master/Dockerfile
 RUN ALPINE_GLIBC_BASE_URL="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" && \
@@ -48,5 +48,5 @@ RUN apk --update add bash && \
     ln -sfn /bin/bash /bin/sh && \
     ln -sfn /bin/bash /bin/ash
 
-RUN apk --update add vim sed && \
+RUN apk --update add vim sed ncurses && \
     ln -sfn /usr/bin/vim /usr/bin/vi

@@ -24,7 +24,8 @@ services:
     image: sqlplus
     container_name: sqlplus
     volumes:
-      - ./sqlplus/scripts:/scripts
+      - /rsync/sqlplus:/scripts
+      - ./sqlplus/output:/output
     command: /bin/sh
   sub-oracle-datastore:
     image: busybox

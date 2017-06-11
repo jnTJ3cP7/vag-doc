@@ -2,8 +2,8 @@
 
 cd `dirname $0`
 
-if [ -f "./normal_env/$1.sh" ]; then
-  source "./normal_env/$1.sh"
+if [ -f "./connection_env/$1.sh" ]; then
+  source "./connection_env/$1.sh"
 else
   echo '####### please input info #########'
   read -p 'USER : ' USER

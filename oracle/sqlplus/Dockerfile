@@ -23,24 +23,25 @@ ENV ORA_SDTZ=Japan
 RUN rm -rf /zips
 
 
-RUN wget --no-check-certificate https://github.com/hanslub42/rlwrap/archive/master.zip
-RUN unzip /master.zip -d /
-WORKDIR /rlwrap-master
-RUN apk --update add make gcc g++ autoconf automake libtool readline-dev 	ncurses-dev
-RUN autoreconf --install
-RUN automake  --add-missing
-RUN ./configure
-RUN make
-RUN make install
+ADD jdk-8* /
+RUN ln -sfn /jdk1.8* /usr/local/java
 
-RUN mkdir /rlwrap-extensions
-WORKDIR /rlwrap-extensions
-RUN wget --no-check-certificate  http://www.linuxification.at/download/rlwrap-extensions-V12-0.05.tar.gz
-RUN tar xvfz rlwrap-extensions-V*.tar.gz
+ENV JAVA_HOME=/usr/local/java
+ENV PATH=$PATH:$JAVA_HOME/bin
+ENV CLASSPATH=.:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib/dt.jar
+
+
+COPY sqlcl-* /
+RUN unzip sqlcl-* && \
+  rm -f sqlcl-*.zip && \
+  chmod +x sqlcl/bin/sql
 
 RUN mkdir /alias
-RUN echo -e "#!/bin/sh\nrlwrap -pRed -if /rlwrap-extensions/sqlplus /sqlplus/sqlplus \"\$@\"" > /alias/sqlplus
+RUN echo -e "#!/bin/sh\n/sqlcl/bin/sql \"\$@\"" > /alias/sqlplus
 RUN chmod +x /alias/sqlplus
 ENV PATH=/alias:$PATH
+
+
+RUN sed -i -e "s/^securerandom.source=.*$/securerandom\.source=file:\/dev\/urandom/" $JAVA_HOME/jre/lib/security/java.security
 
 WORKDIR /scripts

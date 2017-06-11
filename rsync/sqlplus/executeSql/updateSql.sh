@@ -1,9 +1,8 @@
 #!/bin/sh
 
-cd `dirname $0`
 
 DATE=`date +%Y%m%d%H%M%S`
-CONNECTION_DIR='../normal_env'
+CONNECTION_DIR='../connection_env'
 
 while getopts s: OPT
 do
@@ -17,6 +16,10 @@ do
 done
 shift $((OPTIND - 1))
 
+SQL_ABSOLUTE_PATH=`cd $(dirname $SQL_FILE_PATH); pwd`/`basename $SQL_FILE_PATH`
+
+cd `dirname $0`
+
 if [ -f "${CONNECTION_DIR}/$1.sh" ]; then
   source "${CONNECTION_DIR}/$1.sh"
 else
@@ -29,15 +32,20 @@ else
 fi
 
 # variable settings
-SPOOL_NAME="result_${DATE}.csv"
-echo "define spool_name=$SPOOL_NAME" > tmp_obj.sql
-echo "define target_sql=$SQL_FILE_PATH" >> tmp_obj.sql
+echo "define target_sql=$SQL_ABSOLUTE_PATH" > tmp_obj.sql
 
 sqlplus -s "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" <<EOF
   @preparation.sql
   @tmp_obj.sql
-  spool &spool_name
+  SET SQLBLANKLINES on
+  WHENEVER SQLERROR EXIT 1 ROLLBACK;
+  WHENEVER OSERROR EXIT 1 ROLLBACK;
   @&target_sql
+  COMMIT;
 EOF
 
-rm -rf tmp_obj.sql
+if [ $? -ne 0 ]; then
+  echo "fail"
+fi
+
+rm -f tmp_obj.sql

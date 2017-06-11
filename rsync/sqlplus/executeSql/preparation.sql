@@ -1,0 +1,3 @@
+SET SQLFORMAT ANSICONSOLE
+SET verify off
+SET feedback off

@@ -9,20 +9,27 @@ Vagrant.configure("2") do |config|
   config.vm.box_check_update = false
 
   config.vm.network "private_network", ip: "192.168.33.10"
-  config.vm.synced_folder "./", "/vagrant", mount_options: ['dmode=777', 'fmode=777']
+  config.vm.synced_folder "./", "/vagrant", mount_options: ['dmode=777', 'fmode=777'], disabled: true
+  for dir in settings['mount']['vagrant']
+    mounted=File.basename("#{dir}")
+    config.vm.synced_folder "#{dir}", "/vagrant/#{mounted}", mount_options: ['dmode=777', 'fmode=777']
+  end
+  if Vagrant.has_plugin?("vagrant-gatling-rsync")
+    config.gatling.latency = settings['rsync']['latency']
+    config.gatling.time_format = "%H:%M:%S"
+    config.gatling.rsync_on_startup = false
+  end
+  if File.exist?(settings['mount']['rsync']) then
+    config.vm.synced_folder settings['mount']['rsync'], "/rsync", type: "rsync", rsync__args: ["--verbose", "--archive", "--delete", "--copy-links", "--times", "-z", "--chmod=Du=rwx,Dgo=rwx,Fu=rwx,Fgo=rwx"]
+  end
   if File.exist?(settings['mount']['workspace']) then
     config.vm.synced_folder settings['mount']['workspace'], "/workspace", type: "rsync", rsync__args: ["--verbose", "--archive", "--delete", "--copy-links", "--times", "-z", "--chmod=Du=rwx,Dgo=rwx,Fu=rwx,Fgo=rwx"], rsync__exclude: settings['rsync']['excludes']
-    if Vagrant.has_plugin?("vagrant-gatling-rsync")
-      config.gatling.latency = settings['rsync']['latency']
-      config.gatling.time_format = "%H:%M:%S"
-      config.gatling.rsync_on_startup = false
-    end
   end
   if File.exist?(settings['mount']['m2']) then
     config.vm.synced_folder settings['mount']['m2'], "/m2", mount_options: ['dmode=777', 'fmode=777']
   end
   
-  config.hostsupdater.aliases = ["local.co.jp"]
+  config.hostsupdater.aliases = settings['hostsupdater']['aliases']
 
   config.vm.provider "virtualbox" do |vb|
     vb.memory = settings['vb']['memory']
