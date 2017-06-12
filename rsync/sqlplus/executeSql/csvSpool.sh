@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 DATE=`date +%Y%m%d%H%M%S`
 CONNECTION_DIR='../connection_env'
 
@@ -18,6 +17,7 @@ shift $((OPTIND - 1))
 
 SQL_ABSOLUTE_PATH=`cd $(dirname $SQL_FILE_PATH); pwd`/`basename $SQL_FILE_PATH`
 
+
 cd `dirname $0`
 
 if [ -f "${CONNECTION_DIR}/$1.sh" ]; then
@@ -31,9 +31,9 @@ else
   read -p 'SERVICE_NAME : ' SERVICE_NAME
 fi
 
-# variable settings
-echo "define target_sql=$SQL_ABSOLUTE_PATH" >> tmp_obj.sql
-echo "define spool_name=result_$DATE.csv" >> tmp_obj.sql
+echo "define target_sql=$SQL_ABSOLUTE_PATH" > tmp_obj.sql
+OUTPUT="result_${DATE}.csv"
+echo "define spool_name=$OUTPUT" >> tmp_obj.sql
 
 sqlplus -s "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" > /dev/null <<EOF
   @preparation.sql
@@ -44,3 +44,4 @@ sqlplus -s "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" > /dev/null <<EOF
 EOF
 
 rm -rf tmp_obj.sql
+mv -f "${OUTPUT}" /output/

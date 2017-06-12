@@ -1,0 +1,9 @@
+.vagrant
+oracle/_data
+**jdk-*.bin
+**jdk-*.tar.gz
+oracle/OracleDatabase
+oracle/sqlplus/instantclient*.zip
+oracle/sqlplus/sqlcl-*.zip
+oracle/sqlplus/output/*
+!.gitkeep

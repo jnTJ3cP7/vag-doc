@@ -84,7 +84,7 @@ fi
 VALUE2=(`grep '' value2.txt`)
 
 grep '' excluded_tables.txt | xargs -i sed -i "/^{},.*$/Id" objects.txt
-grep '' excluded_columns.txt | xargs -i sed -n "s/^\(.*\),{}$/\1/Igp" objects.txt | xargs -i sed -i "/^{},.*$/Id" objects.txt
+grep '' excluded_columns.txt | xargs -i sed -n "s/^\(.*\),{}$/\1/Igp" objects.txt | xargs -i sed -i "/^{},.*$/d" objects.txt
 TABLES=(`awk -F , '{ print $1 }' objects.txt | sort | uniq`)
 
 echo "set sqlformat insert" > exec.sql

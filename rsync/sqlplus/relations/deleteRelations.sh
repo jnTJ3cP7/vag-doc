@@ -88,3 +88,4 @@ done
 
 
 rm -rf objects.txt target.sql value2.txt
+mv -f "${OUTPUT}" /output/

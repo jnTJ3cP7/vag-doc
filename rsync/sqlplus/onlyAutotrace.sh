@@ -14,4 +14,4 @@ else
   read -p 'SERVICE_NAME : ' SERVICE_NAME
 fi
 
-sqlplus "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" @normal_preparation.sql
+sqlplus "$USER/$PASSWORD@$HOST:$PORT/$SERVICE_NAME" @autotrace_preparation.sql
