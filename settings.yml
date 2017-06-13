@@ -5,6 +5,7 @@ mount:
   vagrant:
     - ./apps
     - ./oracle
+    - ./nodejs
 vbguest:
   auto_update: false
   no_remote: true

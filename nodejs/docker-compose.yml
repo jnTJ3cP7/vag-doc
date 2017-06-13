@@ -1,0 +1,32 @@
+version: '2'
+services:
+  base-nodejs:
+    tty: true
+    build: ./base-nodejs
+      context: ./base-nodejs
+      args:
+        NODE_VERSION: 6.11.0
+        YARN_VERSION: 0.24.6
+    image: base-nodejs
+    container_name: base-nodejs
+  mocky:
+    tty: true
+    image: base-nodejs:latest
+    container_name: mocky
+    ports:
+      - "4321:4321"
+    volumes:
+      - /rsync/mocky:/mocky_resources
+  angular:
+    tty: true
+    build: ./angular
+    image: angular
+    container_name: angular
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./angular/app-base:/app-base
+networks:
+  default:
+    external:
+      name: common_link
