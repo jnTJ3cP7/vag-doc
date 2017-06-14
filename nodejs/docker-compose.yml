@@ -2,10 +2,10 @@ version: '2'
 services:
   base-nodejs:
     tty: true
-    build: ./base-nodejs
+    build:
       context: ./base-nodejs
       args:
-        NODE_VERSION: 6.11.0
+        NODE_VERSION: 8.1.1
         YARN_VERSION: 0.24.6
     image: base-nodejs
     container_name: base-nodejs
@@ -15,6 +15,7 @@ services:
     container_name: mocky
     ports:
       - "4321:4321"
+      - "3011:3000"
     volumes:
       - /rsync/mocky:/mocky_resources
   angular:

@@ -2,6 +2,7 @@
 oracle/_data
 **jdk-*.bin
 **jdk-*.tar.gz
+nodejs/angular/app-base/*
 oracle/OracleDatabase
 oracle/sqlplus/instantclient*.zip
 oracle/sqlplus/sqlcl-*.zip
