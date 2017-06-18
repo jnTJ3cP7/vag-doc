@@ -1,23 +1,42 @@
 version: '2'
 services:
+  base-python2:
+    tty: true
+    build:
+      context: ./base-python2
+      args:
+        PYTHON_VERSION: 2.7.13
+        PYTHON_PIP_VERSION: 9.0.1
+        GPG_KEY: C01E1CAD5EA2C4F0B8E3571504C367C218ADD4FF
+    image: base-python2
+    container_name: base-python2
   base-nodejs:
     tty: true
     build:
       context: ./base-nodejs
       args:
-        NODE_VERSION: 8.1.1
+        NODE_VERSION: 8.1.2
         YARN_VERSION: 0.24.6
     image: base-nodejs
     container_name: base-nodejs
+  json-server:
+    tty: true
+    build: ./json-server
+    image: json-server
+    container_name: json-server
+    ports:
+      - "3011:3000"
+    volumes:
+      - /rsync/nodejs/json-server:/json-server-resources
   mocky:
     tty: true
-    image: base-nodejs:latest
+    build: ./mocky
+    image: mocky
     container_name: mocky
     ports:
       - "4321:4321"
-      - "3011:3000"
     volumes:
-      - /rsync/mocky:/mocky_resources
+      - /rsync/nodejs/mocky:/mocky/resources
   angular:
     tty: true
     build: ./angular

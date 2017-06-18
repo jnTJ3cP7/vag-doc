@@ -4,7 +4,7 @@ set_vagrant_env() {
   while :
   do
     read -p 'VAGRANT MEMORY(default : 1536) : ' VAGRANT_MEMORY
-    echo $VAGRANT_MEMORY | egrep -q '^[a-z][A-Z][0-9]+$'
+    echo $VAGRANT_MEMORY | egrep -q '^[(a-z)|(A-Z)|(0-9)]+$'
     if [ $? -ne 0 ]; then
       VAGRANT_MEMORY=1536
       echo "use default : $VAGRANT_MEMORY"

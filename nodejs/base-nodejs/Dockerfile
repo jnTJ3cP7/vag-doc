@@ -1,6 +1,6 @@
-FROM python:2.7.13-alpine3.6
+FROM base-python2:latest
 
-# node:6-alpineとpython以外同じhttps://github.com/nodejs/docker-node/blob/14681db8e89c0493e8af20657883fa21488a7766/6.10/alpine/Dockerfile
+# https://github.com/nodejs/docker-node/blob/14681db8e89c0493e8af20657883fa21488a7766/6.10/alpine/Dockerfile
 ENV NPM_CONFIG_LOGLEVEL info
 ARG NODE_VERSION
 
@@ -58,13 +58,5 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg \
   && mv yarn.js /usr/local/bin/yarn \
   && chmod +x /usr/local/bin/yarn \
   && apk del .build-deps-yarn
-
-RUN apk --update add tzdata && \
-    cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
-    apk del tzdata && \
-    rm -rf /var/cache/apk/*
-
-ENV LANG=ja_JP.UTF-8
-RUN echo Asia/Tokyo > /etc/timezone
 
 CMD [ "node" ]

@@ -21,7 +21,7 @@ curl -sSL https://get.docker.com/ | sh
 systemctl start docker.service
 systemctl enable docker.service
 usermod -a -G docker vagrant
-docker network create --driver bridge common_link
+su vagrant -c "docker network create --driver bridge common_link"
 systemctl stop docker.service
 rm -rf /var/lib/docker
 exit

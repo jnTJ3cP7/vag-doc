@@ -7,4 +7,8 @@ oracle/OracleDatabase
 oracle/sqlplus/instantclient*.zip
 oracle/sqlplus/sqlcl-*.zip
 oracle/sqlplus/output/*
+**/nginx-proxy/certs/*
+**/openssl/output/*
 !.gitkeep
+oracle/sqlplus/settings/*
+!aliases.xml

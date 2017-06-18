@@ -1,0 +1,8 @@
+Document.Open();
+wait(CONNET);
+sopen(OPEN_LOOK);
+swait(5,"$");
+sputs("ssh vagrant@192.168.33.18\n");
+swait(5,":");
+sputs("vagrant\n");
+sclose();

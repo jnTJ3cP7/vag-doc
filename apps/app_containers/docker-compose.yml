@@ -10,14 +10,18 @@ services:
     container_name: t6j6
     ports:
       - "8080:8080"
+      - "8443:8443"
       - "8000:8000"
       - "9090:9090"
       - "9091:9091"
     volumes:
       - /workspace/Tomcat6Java6Ant01/src/main/webapp:/usr/local/tomcat/webapps/t6j6
       - ./t6j6:/run-scripts
-      - /home/vagrant/fff:/fff
     command: /run-scripts/executeContainer.sh
+    environment:
+      VIRTUAL_HOST: local.co.jp
+      # VIRTUAL_PORT: 8080
+      VIRTUAL_PORT: 8443
   boot10:
     tty: true
     image: spring-boot:latest

@@ -26,6 +26,7 @@ services:
     volumes:
       - /rsync/sqlplus:/scripts
       - ./sqlplus/output:/output
+      - ./sqlplus/settings:/sqlcl_settings
     command: /bin/sh
   sub-oracle-datastore:
     image: busybox

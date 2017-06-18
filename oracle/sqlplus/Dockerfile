@@ -45,7 +45,7 @@ ENV PATH=/alias:$PATH
 RUN sed -i -e "s/^securerandom.source=.*$/securerandom\.source=file:\/dev\/urandom/" $JAVA_HOME/jre/lib/security/java.security
 
 
-RUN mkdir /root/.sqlcl
-RUN ln -sfn /output/aliases.xml /root/.sqlcl/
+RUN ln -sfn /sqlcl_settings /root/.sqlcl
+
 
 WORKDIR /scripts

@@ -1,8 +1,9 @@
 FROM base-nodejs:latest
 
-RUN yarn global add mocky
+RUN mkdir mocky
+WORKDIR /mocky
+RUN yarn add mocky
+WORKDIR /mocky/resources
 
-RUN yarn global add json-server
 
-
-# json-server --watch db.json
+# node mock.js
