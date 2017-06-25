@@ -1,9 +1,11 @@
 #!/bin/sh
+# 必ずインポートするDBサーバでこのスクリプトを実行する
+# このスクリプトはユーザ名ごとコピーするので、fromユーザには権限を持っているシステムユーザ等、別の名前にする
 
 cd `dirname $0`
 
 DATE=`date +%Y%m%d%H%M%S`
-CONNECTION_DIR='../normal_env'
+CONNECTION_DIR='../connection_env'
 
 while getopts f:t: OPT
 do

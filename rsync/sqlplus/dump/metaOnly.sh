@@ -1,9 +1,10 @@
 #!/bin/sh
+# 同サーバDBでのメタデータのコピー
 
 cd `dirname $0`
 
 DATE=`date +%Y%m%d%H%M%S`
-CONNECTION_DIR='../normal_env'
+CONNECTION_DIR='../connection_env'
 
 while getopts f:t: OPT
 do

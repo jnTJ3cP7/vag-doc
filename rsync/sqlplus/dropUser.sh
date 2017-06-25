@@ -12,9 +12,10 @@ createSources() {
 }
 
 DATE=`date +%Y%m%d%H%M%S`
+CONNECTION_DIR='../connection_env'
 
-if [ -f "./normal_env/$1.sh" ]; then
-  source "./normal_env/$1.sh"
+if [ -f "${CONNECTION_DIR}/$1.sh" ]; then
+  source "${CONNECTION_DIR}/$1.sh"
 else
   echo '####### please input DB info #########'
   read -p 'USER : ' USER

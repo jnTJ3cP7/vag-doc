@@ -17,7 +17,7 @@ services:
     volumes_from:
       - oracle-datastore
     volumes:
-      - ./sqlplus/scripts:/home/oracle/sqlplus
+      - /rsync/sqlplus:/home/oracle/sqlplus
   sqlplus:
     tty: true
     build: ./sqlplus
