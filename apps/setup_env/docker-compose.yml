@@ -26,6 +26,16 @@ services:
     image: tomcat6-java6
     container_name: tomcat6-java6
     command: /bin/sh
+  glassfish2:
+    tty: true
+    build: ./glassfish2
+    image: glassfish2
+    container_name: glassfish2
+    ports:
+      - "8080:8080"
+      - "8181:8181"
+      - "4848:4848"
+    command: /bin/sh
   java8:
     tty: true
     build: ./java8
