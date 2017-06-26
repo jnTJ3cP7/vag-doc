@@ -1,0 +1,18 @@
+set ignorecase
+set smartcase
+
+set smartindent
+set autoindent
+
+set imdisable
+
+
+inoremap <D-[> <Esc>
+vnoremap <D-[> <Esc>
+cnoremap <D-[> <Esc>
+nnoremap <D-[> <Esc>
+
+nnoremap <D-r> <C-r>
+
+nnoremap <D-b> <C-b>
+nnoremap <D-f> <C-f>
