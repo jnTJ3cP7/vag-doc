@@ -48,5 +48,5 @@ RUN apk --update add bash && \
     ln -sfn /bin/bash /bin/sh && \
     ln -sfn /bin/bash /bin/ash
 
-RUN apk --update add vim sed ncurses && \
+RUN apk --update add vim sed ncurses less && \
     ln -sfn /usr/bin/vim /usr/bin/vi

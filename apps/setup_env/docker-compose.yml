@@ -14,6 +14,7 @@ services:
     command: /bin/sh
     volumes:
       - ./openssl/output:/output
+      - ./openssl/script:/script
   tomcat6:
     tty: true
     build: ./tomcat6
