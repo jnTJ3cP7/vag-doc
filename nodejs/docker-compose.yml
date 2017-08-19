@@ -15,8 +15,8 @@ services:
     build:
       context: ./base-nodejs
       args:
-        NODE_VERSION: 8.1.2
-        YARN_VERSION: 0.24.6
+        NODE_VERSION: 8.4.0
+        YARN_VERSION: 0.27.5
     image: base-nodejs
     container_name: base-nodejs
   json-server:
@@ -44,8 +44,9 @@ services:
     container_name: angular
     ports:
       - "4200:4200"
+      - "8042:8080"
     volumes:
-      - ./angular/app-base:/app-base
+      - /rsync/nodejs/angular:/app-base
 networks:
   default:
     external:

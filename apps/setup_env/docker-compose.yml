@@ -37,6 +37,21 @@ services:
       - "8181:8181"
       - "4848:4848"
     command: /bin/sh
+  glassfish3:
+    tty: true
+    build: ./glassfish3
+    image: glassfish3
+    container_name: glassfish3
+    ports:
+      - "8048:8080"
+      - "8148:8181"
+      - "4848:4848"
+    volumes:
+      - /rsync/glassfish:/scripts
+    environment:
+      VIRTUAL_HOST: local.co.jp
+      VIRTUAL_PORT: 8181
+    command: /scripts/init.sh
   java8:
     tty: true
     build: ./java8

@@ -13,7 +13,7 @@ echo "alias docker-killall='docker ps -a | awk '\''{print \$1}'\'' | tail -n +2 
 echo "function docker-exec() { docker exec -it \$1 sh; }" >> /home/vagrant/.bashrc
 
 # check latest verison in https://github.com/docker/compose/blob/master/CHANGELOG.md
-sh -c "curl -L https://github.com/docker/compose/releases/download/1.12.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
+sh -c "curl -L https://github.com/docker/compose/releases/download/1.14.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
 chmod +x /usr/local/bin/docker-compose
 # yum install -y epel-release
 # yum -y update
@@ -21,7 +21,7 @@ curl -sSL https://get.docker.com/ | sh
 systemctl start docker.service
 systemctl enable docker.service
 usermod -a -G docker vagrant
-su vagrant -c "docker network create --driver bridge common_link"
+docker network create --driver bridge common_link
 systemctl stop docker.service
 rm -rf /var/lib/docker
 exit

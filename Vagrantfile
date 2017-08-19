@@ -22,10 +22,6 @@ Vagrant.configure("2") do |config|
   if File.exist?(settings['mount']['rsync']) then
     config.vm.synced_folder settings['mount']['rsync'], "/rsync", type: "rsync", rsync__args: ["--verbose", "--archive", "--delete", "--copy-links", "--times", "-z", "--chmod=Du=rwx,Dgo=rwx,Fu=rwx,Fgo=rwx"]
   end
-  for dir in settings['mount']['workspace']
-    mounted=File.basename("#{dir}")
-    config.vm.synced_folder "#{dir}", "/workspace/#{mounted}", type: "rsync", rsync__args: ["--verbose", "--archive", "--delete", "--copy-links", "--times", "-z", "--chmod=Du=rwx,Dgo=rwx,Fu=rwx,Fgo=rwx"], rsync__exclude: settings['rsync']['excludes']
-  end
   if File.exist?(settings['mount']['m2']) then
     config.vm.synced_folder settings['mount']['m2'], "/m2", mount_options: ['dmode=777', 'fmode=777']
   end
@@ -35,6 +31,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |vb|
     vb.memory = settings['vb']['memory']
     vb.cpus = settings['vb']['cpus']
+    vb.customize ["modifyvm", :id, "--cableconnected1", "on"]
   end
 
   config.vm.provision "firstRunning", type: "shell", run: "never", path: "first_running.sh"

@@ -90,7 +90,8 @@ if [ $? -eq 0  ]; then
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*auto_update:\).*$/\1 false/" $SETTINGS_FILE
   sed -i -e "$VBGUEST_LINE,$NEXT_LINE s/^\(.*no_remote:\).*$/\1 true/" $SETTINGS_FILE
 
-  vagrant gatling-rsync-auto > /dev/null 2>&1 &
+  # vagrant gatling-rsync-auto > /dev/null 2>&1 &
+  vagrant gatling-rsync-auto
 else
   # ２回目以降はすでに起動しているかどうかを確認する
   vagrant status | grep -q 'running (virtualbox)'
@@ -99,5 +100,6 @@ else
   fi
   rm -rf .vagrant/machines/default/virtualbox/synced_folders
   vagrantUp ${@+"$@"}
-  vagrant gatling-rsync-auto > /dev/null 2>&1 &
+  # vagrant gatling-rsync-auto > /dev/null 2>&1 &
+  vagrant gatling-rsync-auto
 fi

@@ -10,6 +10,14 @@ RUN sed -i -e '1a \  "defaults": {' /root/.angular-cli.json \
     && sed -i -e '4a \    }' /root/.angular-cli.json \
     && sed -i -e '5a \  },' /root/.angular-cli.json
 
-# ng serve --poll=2000
+WORKDIR /app-base
 
-# EXPOSE 4200
+# ng serve --poll=2000 --disable-host-check
+
+# please command 'vagrant rsync-back' in host machine after 'ng new'
+
+
+# for normal angular2 (bootstrap angular2 book app)
+RUN npm install live-server -g
+
+
