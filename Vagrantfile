@@ -25,6 +25,10 @@ Vagrant.configure("2") do |config|
   if File.exist?(settings['mount']['m2']) then
     config.vm.synced_folder settings['mount']['m2'], "/m2", mount_options: ['dmode=777', 'fmode=777']
   end
+  if File.exist?(settings['mount']['workspace']) then
+    config.vm.synced_folder settings['mount']['workspace'], "/workspace", mount_options: ['dmode=777', 'fmode=777']
+  end
+  
   
   config.hostsupdater.aliases = settings['hostsupdater']['aliases']
 

@@ -80,6 +80,30 @@ services:
       - /workspace:/workspace
       - ./build-server/build-scripts:/build-scripts
     command: /bin/sh
+  jenkins-datastore:
+    image: busybox
+    volumes:
+        - ./jenkins/jenkins_home:/var/jenkins_home
+    container_name: jenkins-datastore
+  jenkins:
+    tty: true
+    # build:
+    #   context: ./jenkins
+    image: jenkins/jenkins:alpine
+    container_name: jenkins
+    ports:
+      - "7080:8080"
+      - "50000:50000"
+    environment:
+      # VIRTUAL_HOST: local.co.jp
+      # VIRTUAL_PORT: 8181
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=false"
+    volumes_from:
+      - jenkins-datastore
+    volumes:
+      - /m2:/root/.m2
+      - /workspace:/workspace
+      - /rsync/jenkins:/rsync
   smtp:
     image: schickling/mailcatcher
     container_name: smtp
