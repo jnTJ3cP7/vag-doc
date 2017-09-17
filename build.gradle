@@ -1,0 +1,28 @@
+apply plugin: 'war'
+
+group = 'Tomcat6Java7Gradle'
+version = '0.0.1-SNAPSHOT'
+
+description = """Tomcat6Java7Gradle"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
+
+repositories {
+    mavenCentral()
+}
+dependencies {
+    compile 'org.apache.commons:commons-lang3:3.5'
+    compile 'javax.servlet:javax.servlet-api:4.0.0-b03'
+}
+
+war {
+    from("config/$profile") {
+        into('META-INF')
+    }
+}
