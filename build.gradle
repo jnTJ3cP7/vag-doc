@@ -25,4 +25,13 @@ war {
     from("config/$profile") {
         into('META-INF')
     }
+    manifest {
+        // attributes 'Implementation-Title': project.projectDescription,
+        //         'Implementation-Version': project.version,
+        //         'Built-By': System.getProperty('user.name'),
+        //         'Built-Date': new Date(),
+        //         'Built-JDK': System.getProperty('java.version'),
+        //         'Built-Gradle': project.gradle.gradleVersion
+        attributes 'Build-Gradle': project.gradle.gradleVersion
+    }
 }
