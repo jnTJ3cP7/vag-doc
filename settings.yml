@@ -4,6 +4,7 @@ mount:
   m2: '../../.m2'
   vagrant:
     - ./apps
+    - ./jenkins
     - ./oracle
     - ./nodejs
 vbguest:

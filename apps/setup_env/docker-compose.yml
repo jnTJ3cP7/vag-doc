@@ -105,6 +105,9 @@ services:
       - /m2:/root/.m2
       - /workspace:/workspace
       - /rsync/jenkins:/rsync
+      - /var/run/docker.sock:/var/run/docker.sock
+    links: 
+      - registry:local.co.jp
   jenkins-datastore-lts:
     image: busybox
     volumes:
@@ -131,6 +134,7 @@ services:
       - /m2:/root/.m2
       - /workspace:/workspace
       - /rsync/jenkins:/rsync
+      - /var/run/docker.sock:/var/run/docker.sock
     # command: /rsync/init.sh
   smtp:
     image: schickling/mailcatcher

@@ -1,0 +1,63 @@
+version: '2'
+services:
+  jenkins-datastore:
+    image: busybox
+    volumes:
+        - ./jenkins/jenkins_home:/var/jenkins_home
+    container_name: jenkins-datastore
+  jenkins:
+    tty: true
+    build:
+      context: ./jenkins
+    image: jenkins
+    container_name: jenkins
+    ports:
+      - "7080:8080"
+      - "50000:50000"
+    volumes_from:
+      - jenkins-datastore
+    volumes:
+      - /m2:/root/.m2
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - ./jenkins/certs:/etc/docker/certs.d/local.co.jp
+      # - ./jenkins/certs:/local.co.jp
+    links: 
+      - registry:local.co.jp
+  registry-datastore:
+    image: busybox
+    volumes:
+        - ./registry/registry:/var/lib/registry
+    container_name: registry-datastore
+  registry:
+    tty: true
+    # build:
+    #   context: ./registry
+    image: registry:latest
+    container_name: registry
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes_from:
+      - registry-datastore
+    environment:
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/local.co.jp.crt
+      REGISTRY_HTTP_TLS_KEY: /certs/local.co.jp.key
+      # VIRTUAL_HOST: local.co.jp
+    volumes:
+      - ./registry/certs:/certs
+    # command: /rsync/init.sh
+  base-alpine:
+    tty: true
+    image: localhost:5000/base-alpine:latest
+    container_name: base-alpine
+    command: /bin/sh
+  tomcat6:
+    build: ./tomcat6
+    image: localhost:5000/tomcat6
+  tomcat6-java8:
+      build: ./tomcat6-java8
+      image: localhost:5000/tomcat6-java8
+networks:
+  default:
+    external:
+      name: common_link

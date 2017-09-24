@@ -6,10 +6,11 @@ oracle/OracleDatabase
 oracle/sqlplus/instantclient*.zip
 oracle/sqlplus/sqlcl-*.zip
 oracle/sqlplus/output/*
-**/nginx-proxy/certs/*
 **/openssl/output/*
 rsync/nodejs/angular/**
 !.gitkeep
 oracle/sqlplus/settings/*
 !aliases.xml
 jenkins_home/
+**/registry/registry/
+**/certs/**
